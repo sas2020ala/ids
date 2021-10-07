@@ -1,0 +1,5 @@
+SSH tunnel jasaimyz:
+    # ssh -N -L 3338:127.0.0.1:3306 root@45.129.0.67
+
+Sosyn mariadb-ga 'od' bazasyna kiremiz:
+    # mariadb -P 3338 -u adm -p od

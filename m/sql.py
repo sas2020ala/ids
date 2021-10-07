@@ -1,0 +1,33 @@
+Q = {
+    "app": "SELECT app_i"
+           " FROM app_r "
+           " WHERE app_code = %s"
+           " AND v_last='y'"
+           " AND status=1",
+    "user-id": "SELECT u.user_i"
+               " FROM user_p up"
+               " INNER JOIN user_app ua"
+               "  ON up.user_i = ua.user_i AND ua.status=1 AND ua.v_last='y'"
+               " WHERE up.u_tel = %s"
+               " AND up.v_last='y'"
+               " AND up.status=1"
+               " AND ua.app_i = %s",
+    "user": "SELECT u.user_i"
+            " , u.u_name"
+            " , u.u_ln"
+            " , u.u_cred"
+            " , u.u_st"
+            " , u.u_email"
+            " , o.org_i"
+            " , a.app_i"
+            " , og.org_n"
+            " , u.u_typ"
+            " FROM user_p up"
+            " INNER JOIN  user_app a"
+            "  ON a.user_i=up.user_i AND a.status=1 AND a.v_last='y'"
+            " INNER JOIN user_org b"
+            "  ON b.user_i=up.user_i AND b.status=1 AND b.v_last='y'"
+            " INNER JOIN org d"
+            "  ON d.org_i = b.org_i AND d.status=1 AND d.v_last='y'"
+            " WHERE up.u_tel = %s",
+}

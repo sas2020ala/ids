@@ -1,0 +1,10 @@
+
+  server {
+      listen 80;
+      server_name ids1.odoovan.com;
+
+     location / {
+          include uwsgi_params;
+          uwsgi_pass unix:/home/admin/ids/ids.sock;
+      }
+  }

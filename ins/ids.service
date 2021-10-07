@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve IDS
+After=network.target
+
+[Service]
+User=admin
+Group=admin
+WorkingDirectory=/home/admin/ids
+Environment="PATH=/home/admin/ids/venv/bin"
+ExecStart=/home/admin/ids/venv/bin/uwsgi --ini ids.ini
+
+[Install]
+WantedBy=multi-user.target
