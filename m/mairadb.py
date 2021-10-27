@@ -102,14 +102,14 @@ class Database:
         Get data from cache, etc, redis, memcache
         :param k: key
         """
-
-        if self.dc.ping():
-            d = pickle.loads(self.dc.get(k))
-
-        else:
+        dc = self.dc
+        if not dc.ping():
             self.connect_to_cache()
-            d = pickle.loads(self.dc.get(k))
-
+        if __debug__:
+            print(f"key exists: {dc.exists(k)}")
+        d = pickle.loads(dc.get(k)) if dc.exists(k) else None
+        if __debug__:
+            print("value ok")
         return d
 
     @staticmethod
