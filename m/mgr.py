@@ -31,9 +31,7 @@ class System:
         if __debug__:
             print(f"{System.app_sms_rest()}")
             print(
-                f"&phones={a}"
-                f"&mes={code} - {md.sms[b]}"
-                f"&fmt=3"
+                f"&phones={a}&mes={code} - {md.sms[b]}&fmt=3".encode("utf-8")
             )
 
         res = requests.get(
