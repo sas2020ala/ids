@@ -21,8 +21,6 @@ class Database:
     def connect(self):
         try:
             dat = self.dsn()
-            if __debug__:
-                print("data: ", dat)
             self.con = dbm.connect(
                 user=dat['model'],
                 password=dat['password'],
