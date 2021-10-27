@@ -37,7 +37,7 @@ class System:
             f"&fmt=3"
         )
         if __debug__:
-            print(f"sms result: {res}")
+            print(f"sms result: {json.loads(res.content)}, {code}")
         return json.loads(res.content), code
 
     @staticmethod
