@@ -157,7 +157,7 @@ def auth_mobile():
             app.logger.warning("AuthMobile: wrong request")
             return proto.msg_wrong("Wrong request")
 
-        app.logger.warning("\n data: \n  :", request.data)
+        app.logger.warning(f"\n data: \n{ request.data}")
         data = json.loads(request.data)
         phone = data["phone"]
         if phone and System.valid_number(phone):
