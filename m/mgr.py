@@ -30,8 +30,12 @@ class System:
         code = System.generate_code()
         if __debug__:
             print(f"{System.app_sms_rest()}")
-            print(f"&phones={a}&mes={code}-{md.sms[b]}&fmt=3")
-            
+            print(
+                f"&phones={a}"
+                f"&mes={code} - {md.sms[b]}"
+                f"&fmt=3"
+            )
+
         res = requests.get(
             f"{System.app_sms_rest()}"
             f"&phones={a}"
