@@ -123,7 +123,7 @@ class System:
             System.crash()
 
         with open(a_sms, "r") as f:
-            d: list = f.read().split(":")  # [server, login, password]
+            d: list = f.read()  # [server, login, password]
             f.close()
 
         if not d:
