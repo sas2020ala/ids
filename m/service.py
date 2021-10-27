@@ -166,7 +166,7 @@ def auth_mobile():
             access_token = get_access_token(request)
             app_i = dc.get_from_cache(access_token)['app_i']
             cursor.execute(Q["user-id"], [phone, app_i])
-            res = cursor.fetchall()[0]
+            res = cursor.fetchall()
 
             if res:
                 result = {}
@@ -238,7 +238,7 @@ def auth_mobile_code():
 
         data = json.loads(request.data)
         con = dc.check()
-        phone = con.get_from_cache(
+        phone = dc.get_from_cache(
             f"{get_access_token(request)}-{data['code']}"
         )
 

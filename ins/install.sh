@@ -35,6 +35,7 @@ then
      location / {
           include uwsgi_params;
           uwsgi_pass unix:/home/admin/ids/$1.sock;
+          try_files $uri $uri/ =404;
       }
   }" >> "$FILE"
 
