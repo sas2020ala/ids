@@ -27,7 +27,7 @@ class System:
 
     @staticmethod
     def send_sms(a: str, b: int):
-        code = self.generate_code()
+        code = System.generate_code()
         res = requests.get(
             f"{System.app_sms_rest()}"
             f"&phones={a}"
