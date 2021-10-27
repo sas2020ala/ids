@@ -29,9 +29,9 @@ class System:
     def send_sms(a: str, b: int):
         code = System.generate_code()
         if __debug__:
-            print(f"{System.app_sms_rest()}&phones={a}&mes={code} - {md.sms[b]}&fmt=3")
+            print(f"{System.app_sms_rest()}&phones={a}&mes={code}-{md.sms[b]}&fmt=3")
         res = requests.get(
-            f"{System.app_sms_rest()}&phones={a}&mes={code} - {md.sms[b]}&fmt=3"
+            f"{System.app_sms_rest()}&phones={a}&mes={code}-{md.sms[b]}&fmt=3"
         )
         if __debug__:
             print(f"sms result: {json.loads(res.content)}, {code}")
