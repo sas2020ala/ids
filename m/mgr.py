@@ -33,9 +33,11 @@ class System:
         res = requests.get(
             f"{System.app_sms_rest()}"
             f"&phones={a}"
-            f"&mes={code} - {md.sms[b]}"
+            f"&mes={code}-{md.sms[b]}"
             f"&fmt=3"
         )
+        if __debug__:
+            print(f"sms result: {res}")
         return json.loads(res.content), code
 
     @staticmethod
