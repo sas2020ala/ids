@@ -47,7 +47,7 @@ def access_token_required(f):
                 app.logger.warning('No access token')
                 return proto.msg_wrong("No access token")
         except Exception as e:
-            app.logger.exception(e)
+            app.logger.error(e)
             return proto.msg_error("Error")
         return f(*args, **kwargs)
 
@@ -117,7 +117,7 @@ def visit():
         if con:
             con.rollback()
 
-        app.logger.exception(e)
+        app.logger.error(e)
         return proto.msg_error("An error has occurred")
     finally:
         if cursor:
@@ -187,7 +187,7 @@ def auth_mobile():
         if con:
             con.rollback()
 
-        app.logger.exception(e)
+        app.logger.error(e)
         return proto.msg_error("Error")
     finally:
         if cursor:
@@ -283,7 +283,7 @@ def auth_mobile_code():
         if con:
             con.rollback()
 
-        app.logger.exception(e)
+        app.logger.error(e)
         return proto.msg_error("Error")
     finally:
         if cursor:
