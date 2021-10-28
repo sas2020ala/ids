@@ -131,13 +131,13 @@ class System:
             System.crash()
 
         with open(a_sms, "r") as f:
-            d: list = f.readline()  # [server, login, password]
+            d: str = f.read()  # [server, login, password]
             f.close()
 
         if not d:
             System.crash()
 
-        return d
+        return d.split("\n")[0]
 
     @staticmethod
     def app_jwt_params():
