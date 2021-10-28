@@ -178,11 +178,10 @@ def auth_mobile():
                     return proto.msg_error(result["error"])
 
                 dc.save_to_cache(f"{access_token}-{_code}", phone)
-
                 return proto.msg_success({"msg": "Success"})
             else:
                 app.logger.warning(f"auth_mobile: {data} user isn't registered")
-
+                proto.msg_error("User isn't registered")
     except Exception as e:
         if con:
             con.rollback()
