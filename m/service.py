@@ -265,7 +265,7 @@ def auth_mobile_code():
                 "utyp": res[9],
                 "sk": f"{k}{phone}",
             }
-            con.save_to_cache(phone, user_data)
+            dc.save_to_cache(phone, user_data)
             return proto.msg_success(
                 {
                     "msg": "Success",
@@ -277,6 +277,9 @@ def auth_mobile_code():
                     "usertype": res[9]
                 }
             )
+        else:
+            return proto.msg_error("At the moment you cannot log in."
+                                   " Please contact your system administrator")
 
     except Exception as e:
         if con:
