@@ -6,12 +6,42 @@ import datetime
 import json
 import os
 import random
+import re
+import smtplib
 import string
-import jwt
+import sys
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
+import jwt
 import requests
 
 from m import md
+from m.md import E_MAIL_SERVER_NAME, E_MAIL_SERVER_PORT
+
+
+class Logger:
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def inform(msg):
+        if __debug__:
+            print(f"\033[96m Info: {msg}\033[00m")
+        pass
+
+    @staticmethod
+    def notify(msg):
+        if __debug__:
+            print(f"\033[93m Warning: {msg}\033[00m")
+        pass
+
+    @staticmethod
+    def error(msg):
+        if __debug__:
+            print(f"\033[91m Error->{msg}\033[00m")
+        pass
 
 
 class System:
@@ -38,6 +68,52 @@ class System:
         if __debug__:
             print(f"sms result: {json.loads(res.content)}, {code}")
         return json.loads(res.content), code
+
+    @staticmethod
+    def send_by_email(user_email):
+        e_mail, pw = System.app_email()
+        code = System.generate_code()
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = "Link"
+        msg['From'] = e_mail
+        msg['To'] = user_email
+
+        text = f"Hi!\nYOUR CODE: {code}\n   {code}"
+        html = f"<html>\n" \
+               f"<head></head>\n" \
+               f"<body>\n" \
+               f"<div>Hi!<br>\n" \
+               f"<h3>Your code:</h3><br>\n" \
+               f"<h2>{code}</h2>\n" \
+               f"</div>\n" \
+               f"</body>\n" \
+               f"</html>\n"
+        msg.attach(MIMEText(text, 'plain'))
+        msg.attach(MIMEText(html, 'html'))
+
+        try:
+            with smtplib.SMTP_SSL(E_MAIL_SERVER_NAME, E_MAIL_SERVER_PORT) as smtp:
+                smtp.login(e_mail, pw)
+                smtp.send_message(msg)
+        except Exception as e:
+            Logger.error(f"System.send_by_email: {sys.exc_info()[-1].tb_lineno}: {e}")
+            return None
+        else:
+            return code
+
+    @staticmethod
+    def check(upw: str, pwd: str, slt: str) -> bool:
+        """The function checks whether the password typed by a user (hashed via the certain algorithm)
+        with the hashed value of it in the database.
+
+        Returns
+        -------
+        a boolean value"""
+
+        if __debug__:
+            print(f'  auth.check')
+
+        return hmac.compare_digest(upw, generate(pwd, slt))
 
     @staticmethod
     def generate_code():
@@ -81,6 +157,24 @@ class System:
         return False
 
     @staticmethod
+    def valid_email(email: str) -> bool:
+        """
+        The function checks if the email entered by a user is valid or not.
+        Parameters
+        ----------
+        email
+
+        Returns
+        -------
+        a boolean value"""
+
+        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+
+        if re.fullmatch(regex, email):
+            return True
+        return False
+
+    @staticmethod
     def jwt_token_for_mobile(un, phone):
         """
         JWT Token For Mobile
@@ -116,6 +210,21 @@ class System:
             System.crash()
 
         return k
+
+    @staticmethod
+    def app_email():
+        email = md.email
+        if not os.path.exists(email):
+            System.crash()
+
+        with open(email, "r") as f:
+            k: str = f.readline()
+            f.close()
+
+        if not k:
+            System.crash()
+
+        return k.strip("\n").split(" ")
 
     @staticmethod
     def app_sms_rest():

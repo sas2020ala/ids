@@ -15,5 +15,13 @@
       <jdbc-url>jdbc:mariadb://localhost:3310/od</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="@local" uuid="b5976ed6-4cb1-4bb1-a03d-b4e1bf5f4eb1">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <remarks>Локальный сервер</remarks>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://172.16.100.160:3306/od</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

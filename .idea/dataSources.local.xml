@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="PY-212.5284.44">
+  <component name="dataSourceStorageLocal" created-in="PY-213.6461.77">
     <data-source name="Organization data" uuid="7b60335b-9e40-4a53-bd8c-6ca0fa50452a">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MARIADB" exact-version="0" />
       <secret-storage>master_key</secret-storage>
@@ -22,6 +22,20 @@
             <name qname="db3" />
             <name qname="od" />
           </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="@local" uuid="b5976ed6-4cb1-4bb1-a03d-b4e1bf5f4eb1">
+      <database-info product="MariaDB" version="10.5.13-MariaDB-1:10.5.13+maria~focal" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.7.3" dbms="MARIADB" exact-version="10.5.13" exact-driver-version="2.7">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>adm</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
         </introspection-scope>
       </schema-mapping>
     </data-source>

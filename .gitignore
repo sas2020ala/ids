@@ -4,6 +4,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.idea
+.idea/
+.idea/*
+
 #
 .bpa
 bpa
@@ -28,8 +32,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.idea
-.idea/
 MANIFEST
 
 # PyInstaller
