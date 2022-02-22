@@ -43,7 +43,7 @@ def verify_app():
             return proto.msg_wrong("Wrong request")
 
         data: dict = json.loads(request.data)
-        app_token = dbi.app.is_registered(dc, data["app_code"])
+        app_token = dbi.app.is_registered(dc, data["appl_code"])
 
         if app_token:
             return proto.msg_success({"access_token": app_token, "msg": "Success"})
@@ -77,6 +77,7 @@ def auth_by_email():
 
         if e_mail and System.valid_email(e_mail):
             app_i: int = dc.get_from_cache(app_token)["app_i"]
+
             if user.is_registered(dc, e_mail, app_i, app_token) == 1:
                 return proto.msg_success({"msg": "Success"})
             else:

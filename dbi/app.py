@@ -4,11 +4,11 @@ from typing import Any
 
 from m.mgr import Logger
 
-APP_ID = "SELECT app_i" \
-         " FROM app_r " \
-         " WHERE app_code = %s" \
-         " AND v_last='y'" \
-         " AND status=1",
+SQL_APP_ID = "SELECT app_i" \
+            " FROM app_r " \
+            " WHERE app_code = %s" \
+            " AND v_last='y'" \
+            " AND status=1"
 
 
 def is_registered(dc: Any, app_code: str) -> int:
@@ -26,7 +26,8 @@ def is_registered(dc: Any, app_code: str) -> int:
 
     try:
         cursor = con.cursor()
-        cursor.execute(APP_ID, [app_code])
+
+        cursor.execute(SQL_APP_ID, [app_code])
         r: list = cursor.fetchone()
 
         if r:
@@ -34,7 +35,7 @@ def is_registered(dc: Any, app_code: str) -> int:
             dc.save_to_cache(app_token, {"app_i": r[0]})
 
     except Exception as e:
-        Logger.error(f"dbi.user.is_registered: {sys.exc_info()[-1].tb_lineno}: {e}")
+        Logger.error(f"dbi.app.is_registered: {sys.exc_info()[-1].tb_lineno}: {sys.exc_info()}")
         dc.rollback()
 
     finally:

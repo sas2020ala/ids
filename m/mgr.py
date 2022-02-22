@@ -175,7 +175,7 @@ class System:
         return False
 
     @staticmethod
-    def jwt_token_for_mobile(un, phone):
+    def jwt_token_for_mobile(un, phone, key):
         """
         JWT Token For Mobile
         Мобильді қосымшаға арнап jwt токен құрастырады.
@@ -185,14 +185,13 @@ class System:
         :param phone: str
         :return: "jwt token"
         """
-        k, _ = System.app_jwt_params()
         return jwt.encode(
             {
                 "username": un,
                 "phone": phone,
                 "data": str(datetime.datetime.utcnow())
             },
-            f"{k}{phone}",
+            key,
             algorithm="HS256"
         )
 

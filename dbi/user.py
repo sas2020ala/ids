@@ -1,3 +1,4 @@
+import secrets
 import sys
 from typing import Any, Dict
 
@@ -19,13 +20,13 @@ USER_PROFILE = "SELECT up.user_i" \
                "  ON b.user_i=up.user_i AND b.status=1 AND b.v_last='y'" \
                " INNER JOIN org d" \
                "  ON d.org_i = b.org_i AND d.status=1 AND d.v_last='y'" \
-               " WHERE up.u_tel = %s"
+               " WHERE up.u_email = %s"
 
 USER_ID = "SELECT up.user_i" \
           " FROM user_p up" \
           " INNER JOIN user_app ua" \
           "  ON up.user_i = ua.user_i AND ua.status=1 AND ua.v_last='y'" \
-          " WHERE up.u_tel = %s" \
+          " WHERE up.u_email = %s" \
           " AND up.v_last='y'" \
           " AND up.status=1" \
           " AND ua.app_i = %s"
@@ -49,19 +50,21 @@ def get_user_info(dc: Any, e_mail: str) -> Dict:
         rs: list = cursor.fetchall()
         if rs:
             r: tuple = rs[0]
-            k, _ = System.app_jwt_params()
-            jwt = System.jwt_token_for_mobile(r[1], e_mail)
             tel = r[3]
+            key = f"{secrets.token_hex(24)}{tel}"
+
+            jwt = System.jwt_token_for_mobile(r[1], tel, key)
+            
             info = {
                 "uid": r[0],
                 "un": r[1],
                 "uln": r[2],
                 "email": r[4],
-                "ids": r[6],
-                "aid": r[7],
-                "org_n": r[8],
-                "utyp": r[9],
-                "sk": f"{k}{tel}",
+                "ids": r[5],
+                "aid": r[6],
+                "org_n": r[7],
+                "utyp": r[8],
+                "sk": key,
             }
             dc.save_to_cache(tel, info)
             info = {
@@ -70,8 +73,8 @@ def get_user_info(dc: Any, e_mail: str) -> Dict:
                 "username": r[1],
                 "lastname": r[2],
                 "phone": tel,
-                "org_n": r[8],
-                "usertype": r[9]
+                "org_n": r[7],
+                "usertype": r[8]
             }
     except Exception as e:
         Logger.error(f"dbi.user.get_user_info: {sys.exc_info()[-1].tb_lineno}: {e}")
@@ -105,7 +108,7 @@ def is_registered(dc: Any, e_mail: str, app_i: str, app_token: str) -> int:
         cursor = con.cursor()
         cursor.execute(USER_ID, [e_mail, app_i])
         rs: list = cursor.fetchall()
-
+        print(rs)
         if rs:
             user_code: str = System.send_by_email(e_mail)
             dc.save_to_cache(f"{app_token}-{user_code}", e_mail)
