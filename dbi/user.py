@@ -32,6 +32,44 @@ USER_ID = "SELECT up.user_i" \
           " AND up.status=1" \
           " AND ua.app_i = %s"
 
+USER_REG = "INSERT INTO user_p(u_name, u_ln, u_tel, u_email, v_last, status) " \
+           "VALUES(%s, %s, %s, %s, 'y', 1) returning user_i"
+
+USER_APP = "INSERT INTO user_app(user_i, app_i, v_last, status) " \
+           "VALUES(%s, %s, 'y', 1) "
+
+USER_ORG = "INSERT INTO user_org(org_i, user_i, v_last, status) " \
+           "VALUES(%s, %s, 'y', 1) "
+
+
+def user_registration(dc: Any, f_n, l_n, tel, e_mail, app_i, org_i):
+    con = dc.check()
+    cursor = None
+    res = 0
+
+    try:
+        cursor = con.cursor()
+        cursor.execute(USER_REG, [f_n, l_n, tel, e_mail])
+        rs: list = cursor.fetchall()
+
+        if rs:
+            res = rs[0][0]
+
+        cursor.execute(USER_APP, [res, app_i])
+
+        cursor.execute(USER_ORG, [org_i, res])
+        dc.commit()
+
+
+    except Exception as e:
+        Logger.error(f"dbi.user.get_user_info: {sys.exc_info()[-1].tb_lineno}: {e}")
+        dc.rollback()
+    finally:
+        if cursor:
+            cursor.close()
+
+    return res
+
 
 def get_user_info(dc: Any, e_mail: str) -> Dict:
     """ Get user profile by e_mail

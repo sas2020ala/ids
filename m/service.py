@@ -126,6 +126,32 @@ def verify_code() -> Dict:
                                " Please contact your system administrator")
 
 
+@app.route("/user/register", methods=["POST"])
+def user_register():
+
+    try:
+        if not request.method == "POST":
+            return proto.msg_wrong("Wrong reuest")
+
+        data = json.loads(request.data)
+
+        first_name = data["f_n"]
+        last_name = data["l_n"]
+        tel_number = data["tel"]
+        email = data["email"]
+        app_i = data["app_i"]
+        org_i = data["org_i"]
+
+        user_i = user.user_registration(dc, first_name, last_name, tel_number, email, app_i, org_i)
+
+        if user_i:
+            return proto.msg_success(user_i)
+
+    except Exception as e:
+        Logger.error(f"m.service.verify_code: {sys.exc_info()[-1].tb_lineno}: {e}")
+        return proto.msg_error("At the moment you cannot log in."
+                               " Please contact your system administrator")
+
 if __name__ == "__main__":
     if not os.path.exists(md.path):
         System.crash()
